@@ -235,7 +235,7 @@ print(jax.typeof(out))  # bfloat16[8@X,8192@Y]
 
 Auto mode and Explicit mode can be composed via `jax.sharding.auto_axes` and `jax.sharding.explicit_axes` APIs. This is a [great doc to read](https://docs.jax.dev/en/latest/notebooks/explicit-sharding.html) for more information.
 
-<h3 id="manual-sharding-mode-via-shard_map">Manual sharding mode via shard_map</h3>
+<h3 id="manual-sharding-mode-via-shard-map">Manual sharding mode via shard_map</h3>
 
 While Shardy is the "compiler take the wheel" mode, jax [shard_map](https://jax.readthedocs.io/en/latest/jep/14273-shard-map.html) puts everything in your hands. You specify the sharding of the inputs, like in jax.jit, but then you write all communication explicitly. Whereas `jax.jit` leaves you with a global cross-device view of the program, `shard_map` gives you a local per-device view.
 
@@ -357,7 +357,7 @@ Now here are a couple of useful worked problems to try and implement using `jax.
 
 ## Worked Problems
 
-Here are some random JAX-related problems. I'll add some more later. For all of these, you'll need some number of TPUs in a Colab. You can use a public Colab with a TPU v2-8. From now on, we'll assume you have N devices available.
+Here are some random JAX-related problems. I'll add some more later. For all of these, you'll need some number of TPUs. Colab no longer hands out TPU v2-8 slices, so use [Kaggle](https://www.kaggle.com/) (which still provides them for free) or an 8-core GCP slice.<d-footnote>If you just want to emulate a mesh on fake problems, you can also fake 8 devices on CPU with `import jax; jax.config.update('jax_num_cpu_devices', 8)` (requires jax >= 0.4.27ish), though this won't reflect real performance.</d-footnote> From now on, we'll assume you have N devices available.
 
 **Question 1:** Let **A** be an array of activations of shape float32[S<sub>X</sub>, D<sub>Y</sub>] with `X * Y = N`. Do the following:
 

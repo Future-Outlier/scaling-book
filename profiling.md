@@ -227,7 +227,9 @@ Here we've zoomed into the FFW block. You'll see the up-projection Op is a fusio
 
 **X:** `bf16[32, 1024, 8192]` \* **W<sub>in</sub>**: `bf16[8192, 32768]` -> **Tmp**: `bf16[32, 1024, 32768]`
 
-**How long do we expect this to take?** First of all, our batch size per data parallel shard is `8 * 1024 = 8192`, so we should be solidly compute-bound. This is on 8 TPU v2 cores (freely available on Google Colab), so we expect it to take about `2 * 32 * 1024 * 8192 * 32768 / (23e12 * 8) = 95.6ms` which is pretty much exactly how long it takes (96ms). That's great! That means we're getting fantastic FLOPs utilization!
+**How long do we expect this to take?** First of all, our batch size per data parallel shard is `8 * 1024 = 8192`, so we should be solidly compute-bound. This is on 8 TPU v2 cores, so we expect it to take about `2 * 32 * 1024 * 8192 * 32768 / (23e12 * 8) = 95.6ms` which is pretty much exactly how long it takes (96ms). That's great! That means we're getting fantastic FLOPs utilization!
+
+Note that Google Colab no longer hands out TPU v2-8 slices. To get a real 8-core slice to follow along, you can use [Kaggle](https://www.kaggle.com/), which still provides them for free, or provision an 8-core slice on GCP.<d-footnote>If you only want to play around with sharding on fake problems, you can also fake 8 devices on CPU with `import jax; jax.config.update("jax_num_cpu_devices", 8)` (requires jax >= 0.4.27ish) and then `print(jax.devices())`. This only works for toy problems and won't reflect real performance.</d-footnote>
 
 **What about communication?** You'll notice the little fusion hidden at the end of the second matmul. If we click on it, you'll see
 
@@ -276,7 +278,7 @@ which tells us the per-shard shape is `bf16[8192] * bf16[4096, 8192] -> bf16[409
 
 {% enddetails %}
 
-**Question 2:** [The Transformer Colab from earlier](https://colab.research.google.com/drive/1_6krERgtolH7hbUIo7ewAMLlbA4fqEF8?usp=sharing) implements a simple mock Transformer. Follow the instructions in the Colab and get a benchmark of the naive Transformer with GSPMD partitioning. How long does each part take? How long should it take? What sharding is being used? Try fixing the sharding! *Hint: use `jax.lax.with_sharding_constraint` to constrain the behavior. With this fix, what's the best MXU you can get?*
+**Question 2:** [The Transformer Colab from earlier](https://colab.research.google.com/drive/1_6krERgtolH7hbUIo7ewAMLlbA4fqEF8?usp=sharing) implements a simple mock Transformer. Since Colab no longer provides TPU v2-8 slices, you'll want to run this on [Kaggle](https://www.kaggle.com/) or an 8-core GCP slice to follow along. Follow the instructions in the Colab and get a benchmark of the naive Transformer with GSPMD partitioning. How long does each part take? How long should it take? What sharding is being used? Try fixing the sharding! *Hint: use `jax.lax.with_sharding_constraint` to constrain the behavior. With this fix, what's the best MXU you can get?*
 
 For reference, the initial version gets roughly 184ms / layer and the optimized profile gets 67ms / layer. Once you've done this, try staring at the profile and see if you can answer these questions purely from the profile:
 
