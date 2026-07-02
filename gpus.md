@@ -365,7 +365,7 @@ See [Appendix A](#appendix-a-how-does-this-change-with-gb200) for more discussio
 * First, each node has 8x400Gbps NDR IB cables connecting it to the leaf switches, giving each node `8 * 400 / 8 = 400 GB/s` of bandwidth to the leaf. We have 8 leaf switches with 3.2TB/s each (64 400 GBps links), but we can only use 32 of the 64 ports to ingress from the SU, so that's `32 * 400 / 8 = 12.8TB/s` for 32 nodes, again exactly 400GB/s.
 * Then at the spine level we have `8 * 16 * 2` 400Gbps NDR IB cables connecting each SU to the spine, giving each SU `8 * 16 * 2 * 400 / 8 = 12.8 TB/s` of bandwidth to the leaf. Again, this is 400GB/s per node. We have 16 spine switches, each with 3.2TB/s, giving us `16 * 3.2 = 51.2 TB/s`, which with 128 nodes is again 400GB/s.
 
-Thus if we bisect our nodes in any way, we will have 400GB/s per GPU between them. Every component has exactly the requisite bandwidth to ensure the fat tree.
+Thus if we bisect our nodes in any way, we will have 400GB/s per node between them. Every component has exactly the requisite bandwidth to ensure the fat tree.
 
 {% enddetails %}
 

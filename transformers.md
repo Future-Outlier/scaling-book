@@ -321,7 +321,7 @@ $$ -->
 
 1. The total parameters is roughly $$L \cdot (3DF + 4DNH + D) + 2DV$$. For the given numbers, this is $$64 \cdot (3 \cdot 4e3 \cdot 16e3 + 4 \cdot 4e3 \cdot 4e3 + 4e3) + 2 \cdot 4e3 \cdot 32e3 = 16e9$$, or 16B parameters.
 2. The ratio of attention parameters to total parameters in general is $$4DNH / (4DNH + 3DF) = 4D^2 / (4D^2 + 12D^2) = 1/4$$. This gives us roughly 1/4 of parameters are used in attention.
-3. Per token, our KV caches are $$2 \cdot L \cdot N \cdot H = 2 \cdot 64 \cdot 4096$$ in int8, which is `512kB / token`.
+3. Per token, our KV caches are $$2 \cdot L \cdot N \cdot H = 2 \cdot 64 \cdot 4096$$ in int8, which is `512 KiB / token`.
 
 {% enddetails %}
 
