@@ -584,7 +584,7 @@ If we go beyond a single node, we can do roughly the same reduction as above, bu
 
 {% details Click here for the answer. %}
 
-**Answer:** This lets us take advantage of the rather ludicrous amount of bandwidth at the spine level. We have 25.6TB/s of bandwidth over 4 nodes, so an AllReduce bandwidth of 6.4TB/s. Using SHARP, this could take as little as `2 * D * F / 6.4e12` seconds.
+**Answer:** This lets us take advantage of the rather ludicrous amount of bandwidth at the spine level. We have 51.2TB/s of bandwidth at the spine over 4 SUs, or 12.8TB/s per SU. Using SHARP, this could take as little as `2 * D * F / 12.8e12` seconds.
 
 {% enddetails %}
 
@@ -849,9 +849,9 @@ At each level we can be bottlenecked by the available link bandwidth or the tota
 
 * **Node level:** at the node level, we have 4 * 1.6TB/s = 6.4TB/s of NVSwitch bandwidth, but each of our 8 GPUs can only egress 450GB/s into the switch, meaning we actually have a peak bandwidth of 450e9 * 8 = 3.6TB/s (full-duplex) within the node.
 * **SU/leaf level:** at the SU level, we have 8 switches connecting 32 nodes in an all-to-all fashion with 1x400 Gbps Infiniband. This gives us 8 * 32 * 400 / 8 = 12.8TB/s of egress bandwidth from the nodes, and we have 8 * 1.6TB/s = 12.8TB/s at the switch level, so both agree precisely.
-* **Spine level:** at the spine level, we have 16 switches connecting 32 leaf switches with 2x400 Gbps links, so we have 32 * 16 * 400 * 2 / 8 = 51.2TB/s of egress bandwidth. The 16 switches give us 16 * 1.6TB/s = 25.6TB/s of bandwidth, so this is the bottleneck at this level.
+* **Spine level:** at the spine level, we have 16 switches connecting 32 leaf switches with 2x400 Gbps links, so we have 32 * 16 * 400 * 2 / 8 = 51.2TB/s of egress bandwidth. Unlike a leaf switch, all 64 ports of a spine switch face downward, so each switch can move 64 * 400 / 8 = 3.2TB/s of traffic, giving us 16 * 3.2TB/s = 51.2TB/s at the switch level, again agreeing precisely.
 
-Per GPU, this gives us 450GB/s of GPU to GPU bandwidth at the node level, 50GB/s at the SU level, and 25 GB/s at the spine level.
+Per GPU, this gives us 450GB/s of GPU to GPU bandwidth at the node level, and 50GB/s at both the SU and spine levels.
 
 **GPU empirical AR bandwidth:**
 
