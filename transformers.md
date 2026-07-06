@@ -220,13 +220,13 @@ $$
 
 ### Other Operations
 
-There are several other operations happening in a Transformer. Layernorms are comparatively cheap and can be ignored for first-order cost estimates. There is also the final enormous (though not per-layer) unembedding matrix multiply.
+There are several other operations happening in a Transformer. Layernorms are comparatively cheap and can be ignored for first-order cost estimates. Note that each layer typically has two of them (one before attention and one before the MLP). There is also the final enormous (though not per-layer) unembedding matrix multiply.
 
 $$
 \begin{array}{ccc}
 \textsf{operation} & \textsf{train FLOPs} & \textsf{params} \\
 \hline \\
-\textrm{layernorm}_D \;\; A[B,T,\red{D}] & \gray{O\left(BTD\right)} & \gray{D} \\[10pt]
+2 \times \textrm{layernorm}_D \;\; A[B,T,\red{D}] & \gray{O\left(BTD\right)} & \gray{2D} \\[10pt]
 A[B,T,\red{D}] \cdot W_{unembed}[\red{D}, V] & 6BTDV & DV \\
 \end{array}
 $$
@@ -319,7 +319,7 @@ $$ -->
 
 {% details Click here for the answer. %}
 
-1. The total parameters is roughly $$L \cdot (3DF + 4DNH + D) + 2DV$$. For the given numbers, this is $$64 \cdot (3 \cdot 4e3 \cdot 16e3 + 4 \cdot 4e3 \cdot 4e3 + 4e3) + 2 \cdot 4e3 \cdot 32e3 = 16e9$$, or 16B parameters.
+1. The total parameters is roughly $$L \cdot (3DF + 4DNH + 2D) + 2DV$$ (counting the two layernorms per layer). For the given numbers, this is $$64 \cdot (3 \cdot 4e3 \cdot 16e3 + 4 \cdot 4e3 \cdot 4e3 + 2 \cdot 4e3) + 2 \cdot 4e3 \cdot 32e3 = 16e9$$, or 16B parameters.
 2. The ratio of attention parameters to total parameters in general is $$4DNH / (4DNH + 3DF) = 4D^2 / (4D^2 + 12D^2) = 1/4$$. This gives us roughly 1/4 of parameters are used in attention.
 3. Per token, our KV caches are $$2 \cdot L \cdot N \cdot H = 2 \cdot 64 \cdot 4096$$ in int8, which is `512 KiB / token`.
 
