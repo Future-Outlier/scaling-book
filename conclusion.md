@@ -90,7 +90,7 @@ _styles: >
 
 This document represents a significant collective investment from many people at Google DeepMind, who we'd like to briefly acknowledge!
 
-- James Bradbury, Reiner Pope, and Blake Hechtman originally derived many of the ideas in this manuscript, and were early to understanding the systems view of the Transformer.
+- James Bradbury, Reiner Pope, Noam Shazeer, and Blake Hechtman originally derived many of the ideas in this manuscript, and were early to understand the systems view of the Transformer.
 - Sholto Douglas wrote the first version of this doc and is responsible for kicking off the project. He is more than anyone responsible for the overall narrative of this doc.
 - Jacob Austin led the work of transforming this first version from rough notes into a more polished and comprehensive artifact. He did much of the work of editing, formatting, and releasing this document, and coordinated contributions from other authors.
 - Most of the figures and animations were made by Anselm Levskaya and Charlie Chen.
