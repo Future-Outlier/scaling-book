@@ -278,7 +278,7 @@ which tells us the per-shard shape is `bf16[8192] * bf16[4096, 8192] -> bf16[409
 
 {% enddetails %}
 
-**Question 2:** [The Transformer Colab from earlier](https://colab.research.google.com/drive/1_6krERgtolH7hbUIo7ewAMLlbA4fqEF8?usp=sharing) implements a simple mock Transformer. Since Colab no longer provides TPU v2-8 slices, you'll want to run this on [Kaggle](https://www.kaggle.com/) or an 8-core GCP slice to follow along. Follow the instructions in the Colab and get a benchmark of the naive Transformer with GSPMD partitioning. How long does each part take? How long should it take? What sharding is being used? Try fixing the sharding! *Hint: use `jax.lax.with_sharding_constraint` to constrain the behavior. With this fix, what's the best MXU you can get?*
+**Question 2:** [The Transformer Colab from earlier](https://colab.research.google.com/drive/1_6krERgtolH7hbUIo7ewAMLlbA4fqEF8?usp=sharing) implements a simple mock Transformer. Since Colab no longer provides TPU v2-8 slices, you'll want to run this on [Kaggle](https://www.kaggle.com/) or an 8-core GCP slice to follow along. Follow the instructions in the Colab and get a benchmark of the naive Transformer with GSPMD partitioning. How long does each part take? How long should it take? What sharding is being used? Try fixing the sharding! *Hint: use `jax.lax.with_sharding_constraint` to constrain the behavior. With this fix, what's the best MFU you can get?*
 
 For reference, the initial version gets roughly 184ms / layer and the optimized profile gets 67ms / layer. Once you've done this, try staring at the profile and see if you can answer these questions purely from the profile:
 

@@ -307,9 +307,9 @@ Here are some more Q/A problems on networking. I find these particularly useful 
 
 {% details Click here for the answer. %}
 
-**Answer:** Each GPU can egress 450GB/s, and each GPU has $B / N$ bytes (where `N=8`, the node size). We can imagine each node sending its bytes to each of the other $N - 1$ nodes one after the other, leading to a total of (N - 1) turns each with $T_\text{comms} = (B / (N * W_\text{unidirectional}))$, or $T_\text{comms} = (N - 1) * B / (N * W_\text{unidirectional})$. This is approximately $B / (N * W_\text{uni})$ or $B / \text{3.6e12}$, the bisection bandwidth.
+**Answer:** Each GPU can egress 450GB/s, and each GPU has $B / N$ bytes (where `N=8`, the node size). We can imagine each node sending its bytes to each of the other $N - 1$ nodes one after the other, leading to a total of (N - 1) turns each with $T_\text{comms} = (B / (N * W_\text{unidirectional}))$, or $T_\text{comms} = (N - 1) * B / (N * W_\text{unidirectional})$. This is approximately $B / W_\text{uni}$ or $B / \text{450e9}$.
 
-For the given array, we have `B=4096 * 65536 * 2=512MB`, so the total time is `536e6 * (8 - 1) / 3.6e12 = 1.04ms`. This could be latency-bound, so it may take longer than this in practice (in practice it takes about 1.5ms).
+For the given array, we have `B = 4096 * 65536 * 2 = 536e6` bytes, so the total time is `536e6 * (8 - 1) / (8 * 450e9) = 1.04ms` (or `536e6 / 450e9 = 1.19ms` with the approximation). This could be latency-bound, so it may take longer than this in practice (in practice it takes about 1.5ms).
 
 {% enddetails %}
 
@@ -420,7 +420,7 @@ $(N-1)/N \cdot \min(k/N, 1) \cdot B / (W \cdot N)$.<d-footnote>The true cost is 
 
 {% details Click here for the answer. %}
 
-**Answer:** From the above, we know that in the dense case, the cost is $B \cdot (N-1) / (W \cdot N^2)$, or $B / (W \cdot N)$. If we know only $\frac{1}{2}$ the entries will be non-padding, we can send $B \cdot k/N / (W \cdot N) = B / (2 \cdot W \cdot N)$, roughly half the overall cost.
+**Answer:** Note that here $B$ is the batch dimension of the array, so the total array size is $V = 2 \cdot B \cdot N$ bytes. From the above, we know that in the dense case, the cost is $V \cdot (N-1) / (W \cdot N^2)$, or roughly $V / (W \cdot N)$. If we know only $\frac{1}{2}$ the entries will be non-padding, we can send $V \cdot k/N / (W \cdot N) = V / (2 \cdot W \cdot N)$, roughly half the overall cost.
 
 {% enddetails %}
 
